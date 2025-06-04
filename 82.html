@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vulnerabilidades - Famílias Atípicas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #e8e8e8;
+            color: #333;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1e5799 0%, #2989d8 50%, #207cca 51%, #7db9e8 100%);
+            padding: 15px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            height: 40px;
+        }
+
+        .logo img {
+            height: 100%;
+            width: auto;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            text-transform: uppercase;
+            padding: 8px 0;
+            border-bottom: 2px solid transparent;
+            transition: border-bottom 0.3s;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            border-bottom: 2px solid white;
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            transition: background 0.3s;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .nav-icon:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Main Section */
+        .main-section {
+            background: linear-gradient(135deg, #b3d1f0 0%, #87ceeb 100%);
+            padding: 80px 20px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .content-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .main-title {
+            font-size: 56px;
+            font-weight: 900;
+            color: #1a365d;
+            margin-bottom: 40px;
+            letter-spacing: 3px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .subtitle {
+            font-size: 20px;
+            color: #2d3748;
+            line-height: 1.7;
+            max-width: 800px;
+            margin: 0 auto 60px;
+            font-weight: 500;
+        }
+
+        .categories {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            background: rgba(255,255,255,0.95);
+            border: none;
+            padding: 18px 30px;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a365d;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .category-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .category-btn.active {
+            background: #2d3748;
+            color: white;
+        }
+
+        /* Vulnerability Sections */
+        .vulnerability-section {
+            margin: 40px 20px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #5dade2 0%, #3498db 100%);
+            padding: 60px 40px;
+            color: #1a365d;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+
+        .section-title {
+            font-size: 42px;
+            font-weight: 900;
+            margin-bottom: 0;
+            letter-spacing: 2px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .family-illustration {
+            position: absolute;
+            right: 60px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 140px;
+            opacity: 0.9;
+            z-index: 1;
+            display: none; /* Ocultando as ilustrações */
+        }
+
+        .section-content {
+            background: white;
+            padding: 0;
+            display: flex;
+            min-height: 400px;
+        }
+
+        .info-box {
+            flex: 1;
+            padding: 50px 40px;
+            position: relative;
+        }
+
+        .info-box:first-child {
+            border-right: 4px solid #2d3748;
+        }
+
+        .info-box h3 {
+            font-size: 28px;
+            font-weight: 900;
+            color: #1a365d;
+            margin-bottom: 30px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .info-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-box li {
+            margin-bottom: 18px;
+            padding-left: 25px;
+            position: relative;
+            line-height: 1.6;
+            color: #2d3748;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .info-box li::before {
+            content: "-";
+            position: absolute;
+            left: 0;
+            color: #3498db;
+            font-weight: 900;
+            font-size: 18px;
+        }
+
+        /* Page spacing */
+        .page-break {
+            height: 50px;
+            background: #e8e8e8;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            .main-title {
+                font-size: 36px;
+            }
+            
+            .section-title {
+                font-size: 28px;
+            }
+            
+            .family-illustration {
+                display: none;
+            }
+            
+            .section-content {
+                flex-direction: column;
+                min-height: auto;
+            }
+            
+            .info-box:first-child {
+                border-right: none;
+                border-bottom: 4px solid #2d3748;
+            }
+            
+            .info-box {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                <img src="logo.png" alt="Logo" />
+            </div>
+            <nav class="nav-menu">
+                <a href="#" class="active">APOIE</a>
+                <a href="#">EVENTOS</a>
+                <a href="#">NEURODIVERGÊNCIAS</a>
+                <a href="#">RECURSOS</a>
+                <a href="#">COMUNIDADES</a>
+                <a href="#">PROFISSIONAL</a>
+                <a href="#">NOTÍCIAS</a>
+                <a href="#">VULNERABILIDADES</a>
+            </nav>
+            <div class="nav-icons">
+                <a href="#" class="nav-icon"></a>
+                <a href="#" class="nav-icon"></a>
+                <a href="#" class="nav-icon"></a>
+            </div>
+        </div>
+    </header>
+
+    <section class="main-section">
+        <div class="content-container">
+            <h1 class="main-title">VULNERABILIDADES</h1>
+            <p class="subtitle">
+                Os principais desafios enfrentados por famílias de crianças atípicas em diferentes contextos (familiar, escolar, social, emocional, econômico), destacando a importância de apoio e pertencimento.
+            </p>
+            <div class="categories">
+                <button class="category-btn active">
+                    Familiar
+                </button>
+                <button class="category-btn">
+                    Escolar
+                </button>
+                <button class="category-btn">
+                    Econômica
+                </button>
+                <button class="category-btn">
+                    Psicológico
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <div class="page-break"></div>
+
+    <!-- Vulnerabilidade Familiar -->
+    <section class="vulnerability-section">
+        <div class="section-header">
+            <h2 class="section-title">VULNERABILIDADE FAMILIAR</h2>
+            <div class="family-illustration">👨‍👩‍👧‍👦</div>
+        </div>
+        <div class="section-content">
+            <div class="info-box">
+                <h3>Desafios:</h3>
+                <ul>
+                    <li>Sobrecarga física e mental dos cuidadores</li>
+                    <li>Falta de apoio da família ampliada</li>
+                    <li>Conflitos entre os membros da casa</li>
+                    <li>Falta de tempo para o autocuidado</li>
+                </ul>
+            </div>
+            <div class="info-box">
+                <h3>Como enfrentar:</h3>
+                <ul>
+                    <li>Criar uma rotina equilibrada com momentos de descanso</li>
+                    <li>Buscar ajuda de familiares ou amigos próximos, mesmo que para pequenas tarefas</li>
+                    <li>Participar de comunidades de pais que vivem situações parecidas</li>
+                    <li>Cuidar da saúde mental com apoio psicológico e momentos de autocuidado</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <div class="page-break"></div>
+
+    <!-- Vulnerabilidade Escolar -->
+    <section class="vulnerability-section">
+        <div class="section-header">
+            <h2 class="section-title">VULNERABILIDADE ESCOLAR</h2>
+            <div class="family-illustration">👨‍👩‍💻</div>
+        </div>
+        <div class="section-content">
+            <div class="info-box">
+                <h3>Desafios:</h3>
+                <ul>
+                    <li>Falta de preparo das escolas para receber crianças atípicas</li>
+                    <li>Preconceito ou exclusão por parte de colegas ou professores</li>
+                    <li>Ausência de planos educacionais individualizados (PEI)</li>
+                </ul>
+            </div>
+            <div class="info-box">
+                <h3>Como enfrentar:</h3>
+                <ul>
+                    <li>Conhecer e exigir os direitos educacionais da criança (como PEI e inclusão)</li>
+                    <li>Conversar com a escola para criar estratégias de adaptação</li>
+                    <li>Participar ativamente das reuniões escolares e manter diálogo aberto</li>
+                    <li>Compartilhar informações com os professores para sensibilizá-los</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <div class="page-break"></div>
+
+    <!-- Vulnerabilidade Econômica -->
+    <section class="vulnerability-section">
+        <div class="section-header">
+            <h2 class="section-title">VULNERABILIDADE ECONÔMICA</h2>
+            <div class="family-illustration">💰</div>
+        </div>
+        <div class="section-content">
+            <div class="info-box">
+                <h3>Desafios:</h3>
+                <ul>
+                    <li>Alto custo com terapias, tratamentos, transporte e adaptações</li>
+                    <li>Dificuldade de manter o trabalho por falta de rede de apoio</li>
+                    <li>Falta de informações sobre benefícios e auxílios disponíveis</li>
+                </ul>
+            </div>
+            <div class="info-box">
+                <h3>Como enfrentar:</h3>
+                <ul>
+                    <li>Buscar informações sobre auxílios como o BPC/LOAS, isenções e programas sociais</li>
+                    <li>Acessar serviços públicos de saúde e educação sempre que possível</li>
+                    <li>Compartilhar recursos com outras famílias (ex: caronas, materiais, profissionais)</li>
+                    <li>Planejar financeiramente dentro da realidade familiar</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <div class="page-break"></div>
+
+    <!-- Vulnerabilidade Psicológica -->
+    <section class="vulnerability-section">
+        <div class="section-header">
+            <h2 class="section-title">VULNERABILIDADE PSICOLÓGICA</h2>
+            <div class="family-illustration">🧠</div>
+        </div>
+        <div class="section-content">
+            <div class="info-box">
+                <h3>Desafios:</h3>
+                <ul>
+                    <li>Ansiedade, estresse, depressão e exaustão emocional</li>
+                    <li>Sentimento de culpa por não conseguir "dar conta"</li>
+                    <li>Medo do futuro da criança</li>
+                </ul>
+            </div>
+            <div class="info-box">
+                <h3>Como enfrentar:</h3>
+                <ul>
+                    <li>Buscar acompanhamento psicológico individual ou familiar</li>
+                    <li>Praticar o autocuidado (mesmo em pequenos momentos)</li>
+                    <li>Reconhecer suas conquistas diárias, por menores que sejam</li>
+                    <li>Encontrar apoio em comunidades que acolham sem julgamento</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Funcionalidade para alternar entre categorias
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        const sections = document.querySelectorAll('.vulnerability-section');
+
+        categoryBtns.forEach((btn, index) => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                btn.classList.add('active');
+                
+                // Scroll to corresponding section
+                sections[index].scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
